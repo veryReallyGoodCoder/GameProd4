@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848409ee8ba454f42a5ddff137688a27, type: 3}
+  m_Name: Images
+  m_EditorClassIdentifier: 
+  m_GuidLow: 4911060586826490862
+  m_GuidHigh: 17184087037905067668
+  m_DataStore:
+    m_Storage: []
+  m_Images:
+  - m_SerializedGuid:
+      m_GuidLow: 4853750046352174550
+      m_GuidHigh: 10637400079427991471
+    m_SerializedTextureGuid:
+      m_GuidLow: 17664287025898984487
+      m_GuidHigh: 12889467193439917225
+    m_Size: {x: 0.5, y: 0.8957952}
+    m_SpecifySize: 1
+    m_Name: towerCrumbled
+    m_Texture: {fileID: 0}
+  - m_SerializedGuid:
+      m_GuidLow: 4901218895186556733
+      m_GuidHigh: 6576870183801850039
+    m_SerializedTextureGuid:
+      m_GuidLow: 1253202273389490064
+      m_GuidHigh: 1033061927168875896
+    m_Size: {x: 0.5, y: 0.36842105}
+    m_SpecifySize: 1
+    m_Name: Castle
+    m_Texture: {fileID: 0}

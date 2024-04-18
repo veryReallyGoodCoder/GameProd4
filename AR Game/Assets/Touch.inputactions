@@ -1,0 +1,34 @@
+{
+    "name": "Touch",
+    "maps": [
+        {
+            "name": "Touchscreen",
+            "id": "6bc0b217-e664-456d-b27e-8d9e4a649f4e",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Value",
+                    "id": "406e08af-82b1-4009-9620-225c44b89536",
+                    "expectedControlType": "Touch",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "3423b97e-8dad-42c8-b089-a4c2f27ad965",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

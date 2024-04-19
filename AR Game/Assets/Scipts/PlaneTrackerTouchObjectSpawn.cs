@@ -129,14 +129,17 @@ public class PlaneTrackerTouchObjectSpawn : MonoBehaviour
                 Debug.Log("Model hit");
 
                 Transform modelTransform = hit.collider.transform;
+                Debug.Log($"model scale " + modelTransform.localScale.x);
+
                 modelTransform.localScale *= scaleF;
-                Debug.Log("Model scaled");
+                Debug.Log("Model scaled" + modelTransform.localScale);
 
                 if (modelTransform.localScale.x >= 6f)
                 {
                     audioSrc.PlayOneShot(DestroySound);
 
                     GameObject desPrefab = Instantiate(destroyedPrefab, modelTransform.position, modelTransform.rotation);
+                    desPrefab.transform.localScale = modelTransform.localScale;
                     Destroy(modelTransform.gameObject);
 
                     spawned = false;

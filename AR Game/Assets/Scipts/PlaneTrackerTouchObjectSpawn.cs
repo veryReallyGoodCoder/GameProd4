@@ -15,14 +15,19 @@ public class PlaneTrackerTouchObjectSpawn : MonoBehaviour
 
     List<ARRaycastHit> hits = new List<ARRaycastHit>();
 
+    [Header("Prefabs")]
     public GameObject spawnPrefab;
+    public GameObject destroyedPrefab;
     private GameObject spawnedModel;
 
-    bool spawned;
-
     [Header("Sound")]
-    public AudioClip TouchSound;
+    public AudioClip PlaceSound, DestroySound;
     private AudioSource audioSrc;
+
+    [Header("Variables")]
+    private bool spawned;
+
+    private float scaleF = 1.1f;
 
     private void Awake()
     {
@@ -36,7 +41,7 @@ public class PlaneTrackerTouchObjectSpawn : MonoBehaviour
     void Update()
     {
         
-        if(Input.touchCount > 0)
+        /*if(Input.touchCount > 0)
         {
             if (rayMan.Raycast(Input.GetTouch(0).position, hits, TrackableType.PlaneWithinPolygon))
             {
@@ -52,7 +57,7 @@ public class PlaneTrackerTouchObjectSpawn : MonoBehaviour
                     spawnedModel.transform.position = hitPose.position;
                 }
             }
-        }
+        }*/
         
         /*if (Touchscreen.current.primaryTouch.press.isPressed)
         {
@@ -74,25 +79,71 @@ public class PlaneTrackerTouchObjectSpawn : MonoBehaviour
         EnhancedTouch.TouchSimulation.Enable();
         EnhancedTouch.EnhancedTouchSupport.Enable();
         EnhancedTouch.Touch.onFingerDown += FingerDown;
+        EnhancedTouch.Touch.onFingerDown += TouchScale;
     }
      private void OnDisable()
     {
         EnhancedTouch.TouchSimulation.Disable();
         EnhancedTouch.EnhancedTouchSupport.Disable();
         EnhancedTouch.Touch.onFingerDown -= FingerDown;
+        EnhancedTouch.Touch.onFingerDown -= TouchScale;
     }
 
     private void FingerDown(EnhancedTouch.Finger finger)
     {
         if (finger.index != 0) return;
 
-        if (rayMan.Raycast(finger.currentTouch.screenPosition, hits, TrackableType.PlaneWithinPolygon))
+        if (rayMan.Raycast(finger.currentTouch.screenPosition, hits, TrackableType.PlaneWithinPolygon) && !spawned)
         {
+                        
             foreach(ARRaycastHit hit in hits)
             {
+                
                 Pose pose = hit.pose;
                 GameObject obj = Instantiate(spawnPrefab, pose.position, pose.rotation);
+                audioSrc.PlayOneShot(PlaceSound);
+
+                spawned = true;
+                break;
             }
+
+        }
+
+    }
+
+    private void TouchScale(EnhancedTouch.Finger finger)
+    {
+        if (finger.index != 0) return;
+
+        Debug.Log("Scale Touch");
+
+        Vector2 touchPos = finger.currentTouch.screenPosition;
+        Ray ray = Camera.main.ScreenPointToRay(touchPos);
+        RaycastHit hit;
+
+        if(Physics.Raycast(ray, out hit))
+        {
+            if (hit.collider.CompareTag("Model"))
+            {
+                Debug.Log("Model hit");
+
+                Transform modelTransform = hit.collider.transform;
+                modelTransform.localScale *= scaleF;
+                Debug.Log("Model scaled");
+
+                if (modelTransform.localScale.x >= 6f)
+                {
+                    audioSrc.PlayOneShot(DestroySound);
+
+                    GameObject desPrefab = Instantiate(destroyedPrefab, modelTransform.position, modelTransform.rotation);
+                    Destroy(modelTransform.gameObject);
+
+                    spawned = false;
+
+                    Debug.Log("Model Destroyed");
+                }
+            }
+
         }
     }
 

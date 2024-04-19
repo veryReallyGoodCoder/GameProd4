@@ -27,7 +27,7 @@ public class PlaneTrackerTouchObjectSpawn : MonoBehaviour
     [Header("Variables")]
     private bool spawned;
 
-    private float scaleF = 1.1f;
+    [SerializeField] private float scaleF = 1.1f;
 
     private void Awake()
     {
@@ -105,6 +105,7 @@ public class PlaneTrackerTouchObjectSpawn : MonoBehaviour
 
                 spawned = true;
                 break;
+
             }
 
         }

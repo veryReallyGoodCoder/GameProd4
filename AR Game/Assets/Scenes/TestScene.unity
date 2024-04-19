@@ -532,12 +532,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rayMan: {fileID: 1100033966}
-  spawnPrefab: {fileID: 783026778097621819, guid: 74d4b4f7382bd48428f7765e3150943b,
+  spawnPrefab: {fileID: 3044908366562547452, guid: 2ec45a38b44da984f89d98e8b5d2f7f9,
     type: 3}
   destroyedPrefab: {fileID: 783026778097621819, guid: 74d4b4f7382bd48428f7765e3150943b,
     type: 3}
   PlaceSound: {fileID: 8300000, guid: 47c9da5f5eb726f4395bb878fd30219f, type: 3}
   DestroySound: {fileID: 8300000, guid: 5f57b36d9e596a74e96e6578046c3929, type: 3}
+  scaleF: 1.8
 --- !u!114 &1100033966
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -565,7 +566,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PlanePrefab: {fileID: 6731996590777609984, guid: 66b1863a017bcc34495157e7c5f4e8df,
     type: 3}
-  m_DetectionMode: -1
+  m_DetectionMode: 1
 --- !u!82 &1100033968
 AudioSource:
   m_ObjectHideFlags: 0

@@ -18,20 +18,26 @@ public class PlaneTrackerTouchObjectSpawn : MonoBehaviour
     [Header("Prefabs")]
     public GameObject spawnPrefab;
     public GameObject destroyedPrefab;
-    private GameObject spawnedModel;
+    public GameObject soldier;
+    private GameObject spawnedGuy;
 
     [Header("Sound")]
-    public AudioClip PlaceSound, DestroySound;
+
+    public AudioClip PlaceSound, DestroySound, TrumpetSound;
     private AudioSource audioSrc;
 
     [Header("Variables")]
-    private bool spawned;
+    private bool spawned, solSpawned;
+
+    public float moveSpeed = 5f;
+
 
     [SerializeField] private float scaleF = 1.1f;
 
     private void Awake()
     {
         spawned = false;
+        solSpawned = false;
         rayMan = GetComponent<ARRaycastManager>();
         audioSrc = GetComponent<AudioSource>();
     }
@@ -93,21 +99,35 @@ public class PlaneTrackerTouchObjectSpawn : MonoBehaviour
     {
         if (finger.index != 0) return;
 
-        if (rayMan.Raycast(finger.currentTouch.screenPosition, hits, TrackableType.PlaneWithinPolygon) && !spawned)
+        if (rayMan.Raycast(finger.currentTouch.screenPosition, hits, TrackableType.PlaneWithinPolygon) && !spawned && !solSpawned)
         {
                         
             foreach(ARRaycastHit hit in hits)
             {
                 
                 Pose pose = hit.pose;
-                GameObject obj = Instantiate(spawnPrefab, pose.position, pose.rotation);
+                spawnedGuy = Instantiate(soldier, pose.position, pose.rotation);
+                audioSrc.PlayOneShot(TrumpetSound);
+
+                solSpawned = true;
+                break;
+
+            }
+
+        }
+        else if(rayMan.Raycast(finger.currentTouch.screenPosition, hits, TrackableType.PlaneWithinPolygon) && !spawned && solSpawned)
+        {
+            foreach (ARRaycastHit hit in hits)
+            {
+
+                Pose pose = hit.pose;
+                GameObject obj = Instantiate(soldier, pose.position, pose.rotation);
                 audioSrc.PlayOneShot(PlaceSound);
 
                 spawned = true;
                 break;
 
             }
-
         }
 
     }
@@ -131,7 +151,22 @@ public class PlaneTrackerTouchObjectSpawn : MonoBehaviour
                 Transform modelTransform = hit.collider.transform;
                 Debug.Log($"model scale " + modelTransform.localScale.x);
 
-                modelTransform.localScale *= scaleF;
+                Vector3 direction = spawnedGuy.transform.position - modelTransform.position;
+                float distance = direction.magnitude;
+
+                if (distance <= 0.1) return;
+
+                direction.Normalize();
+
+                float currSpeed = Mathf.Lerp(0, moveSpeed, Mathf.Clamp01(distance / 10f));
+
+                while(distance >= 0.1)
+                {
+                    spawnedGuy.transform.position += direction * currSpeed * Time.deltaTime;
+                }
+
+
+                /*modelTransform.localScale *= scaleF;
                 Debug.Log("Model scaled" + modelTransform.localScale);
 
                 if (modelTransform.localScale.x >= 6f)
@@ -145,29 +180,9 @@ public class PlaneTrackerTouchObjectSpawn : MonoBehaviour
                     spawned = false;
 
                     Debug.Log("Model Destroyed");
-                }
+                }*/
             }
 
-        }
-    }
-
-    void spawnedModelOnPlane(Vector2 touchPos)
-    {
-        List<ARRaycastHit> hits = new List<ARRaycastHit>();
-        rayMan.Raycast(touchPos, hits, TrackableType.PlaneWithinPolygon);
-
-        if(hits.Count > 0 )
-        {
-            Pose hitPose = hits[0].pose;
-
-            if(spawnedModel == null)
-            {
-                spawnedModel = Instantiate(spawnPrefab, hitPose.position, hitPose.rotation);
-            }
-            else
-            {
-                spawnedModel.transform.position = hitPose.position;
-            }
         }
     }
 
